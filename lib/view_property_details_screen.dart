@@ -154,6 +154,27 @@ class _ViewPropertyDetailsState extends State<ViewPropertyDetails> {
                     const SizedBox(
                       height: 30,
                     ),
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      keyboardType: TextInputType.text,
+                      onSaved: (onSaveValue) => onSaveValue!,
+                      onChanged: (onChangeValue) => onChangeValue,
+                      validator: (validatorValue) {
+                        if (validatorValue == null || validatorValue.isEmpty) {
+                          return 'Please enter the property location';
+                        }
+                        return null;
+                      },
+                      textInputAction: TextInputAction.next,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter the property location',
+                        labelText: 'Property Location',
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(
