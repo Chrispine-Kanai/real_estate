@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:real_estate/property_list_screen.dart';
 
 class ConfirmOtp extends StatefulWidget {
-  const ConfirmOtp({Key? key}) : super(key: key);
+  const ConfirmOtp({Key? key, required this.mobileno}) : super(key: key);
+
+  final String mobileno;
 
   @override
   State<ConfirmOtp> createState() => _ConfirmOtpState();
@@ -111,13 +114,21 @@ class _ConfirmOtpState extends State<ConfirmOtp> {
 
   Future<bool> _verifyOTPCode() async {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Validated Successfully')));
+      final number = widget.mobileno;
+      // final number = '0741308360';
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const PropertyScreen()),
-      );
+      final loginEndpoint =
+          "http://192.168.1.84:8180/confirmotp?&otpsentback=$otpCode&phonenumber=$number";
+      try {
+        var response = await http.post(Uri.parse(loginEndpoint));
+        _showSnackBar(response.statusCode.toString());
+      } catch (e) {
+        _showSnackBar(e.toString());
+      }
+
+      _showSnackBar('Validated Successfully');
+
+      _navigate(const PropertyScreen());
 
       return true;
     } else {
@@ -125,5 +136,22 @@ class _ConfirmOtpState extends State<ConfirmOtp> {
           const SnackBar(content: Text('Not Validated Successfully')));
       return true;
     }
+  }
+
+  _navigate(route) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => route),
+    );
+  }
+
+  _showSnackBar(String text) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          text,
+        ),
+      ),
+    );
   }
 }

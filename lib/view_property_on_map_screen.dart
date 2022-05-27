@@ -43,8 +43,8 @@ class _ViewPropertyOnMapState extends State<ViewPropertyOnMap> {
   @override
   Widget build(BuildContext context) {
     _markers.add(
-      Marker(
-        markerId: const MarkerId('Home'),
+      const Marker(
+        markerId: MarkerId('Work'),
         position: LatLng(
           -1.3299988365181687,
           36.862984584654335,
